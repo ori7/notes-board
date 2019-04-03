@@ -1,3 +1,12 @@
 body {
-    background-image: url(./app/upload/tile.jpg);
+    background-image: url(./assets/img/tile.jpg);
+}
+
+.fadeOut{
+    animation: fadeOut 2s;
+}
+
+@keyframes fadeOut{
+    from {opacity: 1;}
+    to {opacity: 0;}
 }

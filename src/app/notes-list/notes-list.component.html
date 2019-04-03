@@ -1,3 +1,4 @@
-<p>
-  notes-list works!
-</p>
+<div class="row">
+    <div class='m-3' *ngFor= 'let n of notesList'>
+    <app-note [note]='n' (deleteNote)="deleteNote($event)"></app-note>
+</div>

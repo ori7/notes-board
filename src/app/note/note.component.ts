@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Note } from '../models/note';
 
 @Component({
   selector: 'app-note',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NoteComponent implements OnInit {
 
+  @Input() note: Note;
+  @Output() deleteNote: EventEmitter<number> = new EventEmitter<number>();
+
   constructor() { }
 
   ngOnInit() {
+    console.log(this.note);
   }
 
+  delete(){
+
+    this.deleteNote.emit(this.note.id);
+  }
 }

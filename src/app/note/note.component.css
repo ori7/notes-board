@@ -1,0 +1,17 @@
+.note {
+    background-image: url(../../assets/img/notebg.png);
+    background-repeat: no-repeat;
+    width: 200px;
+    height: 250px;
+    margin: 10% 4%;
+    padding: 4%;
+    font-family: 'Gloria Hallelujah', cursive;
+    position: relative;
+}
+
+img {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+}
