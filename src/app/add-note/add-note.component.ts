@@ -20,7 +20,6 @@ export class AddNoteComponent implements OnInit {
 
   saveNote() {
 
-    console.log(this.note);
     const checkNote = this.notesService.checkNote(this.note);
     this.checkNoteComments(checkNote);
     if (checkNote === "good"){

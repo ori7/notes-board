@@ -18,11 +18,13 @@ export class NotesService {
       check = "dateWrong";
     else if (!/([0-1]{1}[\d]{1}|2{1}[0-3]{1}):[0-5]{1}[\d]{1}/gm.test(note.time) && note.time !== "")
       check = "timeWrong";
-    console.log(check); return check;
+    return check;
   }
 
   saveNote(note) {
 
+    let noteArray = this.getFromlocalStorage();
+    this.updateLocalStorage(noteArray);
     const number = Object.keys(localStorage).length;
     note.id = number;
     localStorage.setItem('note ' + number, JSON.stringify(note));
@@ -33,31 +35,38 @@ export class NotesService {
 
     const noteArray = [];
     for (let i = 0; ; i++) {
-        const note = JSON.parse(localStorage.getItem('note ' + i));
-        if (note === null)
-            break;
-        noteArray.push(note);
+      const note = JSON.parse(localStorage.getItem('note ' + i));
+      if (note === null)
+        break;
+      noteArray.push(note);
     }
     return noteArray;
   }
 
-  deleteNote(id){
+  deleteNote(id) {
 
     let noteArray = this.getFromlocalStorage();
-    noteArray.splice(id, 1);
-    this.updatelocalStorage(noteArray);
-    console.log(noteArray);
+    noteArray = noteArray.filter(function (obj) {
+      return obj.id !== id;
+    });
+    this.updateLocalStorageWithoutId(noteArray);
   }
 
-  updatelocalStorage(noteArray){
+  updateLocalStorage(noteArray) {
 
     localStorage.clear();
-    for(let i = 0; i < noteArray.length; i++){
+    for (let i = 0; i < noteArray.length; i++) {
       noteArray[i].id = i;
-      localStorage.setItem('note ' + i, JSON.stringify(noteArray[i]))
+      localStorage.setItem('note ' + i, JSON.stringify(noteArray[i]));
     }
-
   }
 
-  
+  updateLocalStorageWithoutId(noteArray) {
+
+    localStorage.clear();
+    for (let i = 0; i < noteArray.length; i++) {
+      localStorage.setItem('note ' + i, JSON.stringify(noteArray[i]));
+    }
+  }
+
 }

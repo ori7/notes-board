@@ -10,19 +10,22 @@ import { NotesService } from '../services/notes.service';
 export class NotesListComponent implements OnInit {
 
   notesList: Note[];
+  NoteArray: object;
 
   constructor(private notesService: NotesService) { }
 
   ngOnInit() {
 
-    this.notesList = this.notesService.getFromlocalStorage(); console.log(this.notesList);
+    this.notesList = this.notesService.getFromlocalStorage();
+    this.NoteArray = null;
   }
 
   deleteNote(id) {
 
     this.notesService.deleteNote(id);
-    let NoteArray = document.querySelectorAll('.m-3');
-    this.deliteNoteByfadeOut(NoteArray[id]);
+    if (!this.NoteArray)
+      this.NoteArray = document.querySelectorAll('.m-3');
+    this.deliteNoteByfadeOut(this.NoteArray[id]);
   }
 
   deliteNoteByfadeOut(elementToFadeOut) {
@@ -30,7 +33,7 @@ export class NotesListComponent implements OnInit {
     elementToFadeOut.classList.add('fadeOut');
     setTimeout(function () {
       elementToFadeOut.parentNode.removeChild(elementToFadeOut);
-    }, 200);
+    }, 2000);
   }
 
 }
