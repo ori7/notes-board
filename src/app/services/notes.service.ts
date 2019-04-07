@@ -1,13 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Note } from '../models/note';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotesService {
 
-  constructor(private router: Router) { }
+  notesArray: BehaviorSubject<any[]>;
+  tempNotesArray: object[];
+
+
+  constructor(private router: Router) {
+
+    this.notesArray = new BehaviorSubject<any[]>(this.getFromlocalStorage());
+    this.tempNotesArray=<object[]>[];
+  }
 
   checkNote(note: Note) {
 
@@ -23,24 +32,20 @@ export class NotesService {
 
   saveNote(note) {
 
-    let noteArray = this.getFromlocalStorage();
-    this.updateLocalStorage(noteArray);
-    const number = Object.keys(localStorage).length;
-    note.id = number;
-    localStorage.setItem('note ' + number, JSON.stringify(note));
-    location.reload();
+    this.tempNotesArray = this.getFromlocalStorage();
+    note.id = this.makeid(15);
+    if (this.tempNotesArray === null) {
+      this.tempNotesArray = [note];
+    }
+    else
+      this.tempNotesArray.push(note);
+    localStorage.setItem('notes', JSON.stringify(this.tempNotesArray));
+    this.notesArray.next(this.getFromlocalStorage());
   }
 
-  getFromlocalStorage() {
+  private getFromlocalStorage(): any[] {
 
-    const noteArray = [];
-    for (let i = 0; ; i++) {
-      const note = JSON.parse(localStorage.getItem('note ' + i));
-      if (note === null)
-        break;
-      noteArray.push(note);
-    }
-    return noteArray;
+    return JSON.parse(localStorage.getItem('notes'));
   }
 
   deleteNote(id) {
@@ -49,24 +54,24 @@ export class NotesService {
     noteArray = noteArray.filter(function (obj) {
       return obj.id !== id;
     });
-    this.updateLocalStorageWithoutId(noteArray);
+    this.updateLocalStorage(noteArray);
+    this.notesArray.next(noteArray);
   }
 
   updateLocalStorage(noteArray) {
 
-    localStorage.clear();
-    for (let i = 0; i < noteArray.length; i++) {
-      noteArray[i].id = i;
-      localStorage.setItem('note ' + i, JSON.stringify(noteArray[i]));
-    }
+    localStorage.setItem('notes', JSON.stringify(noteArray));
   }
 
-  updateLocalStorageWithoutId(noteArray) {
+  makeid(length) {
 
-    localStorage.clear();
-    for (let i = 0; i < noteArray.length; i++) {
-      localStorage.setItem('note ' + i, JSON.stringify(noteArray[i]));
-    }
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (var i = 0; i < length; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
   }
 
 }

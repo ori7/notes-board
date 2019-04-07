@@ -16,24 +16,23 @@ export class NotesListComponent implements OnInit {
 
   ngOnInit() {
 
-    this.notesList = this.notesService.getFromlocalStorage();
+    this.notesService.notesArray.subscribe(resArray => {
+      this.notesList = resArray;
+    })
     this.NoteArray = null;
   }
 
   deleteNote(id) {
 
-    this.notesService.deleteNote(id);
-    if (!this.NoteArray)
-      this.NoteArray = document.querySelectorAll('.m-3');
-    this.deliteNoteByfadeOut(this.NoteArray[id]);
+    this.NoteArray = document.querySelectorAll('.m-3');
+    for (let i = 0; i < this.notesList.length; i++) {
+      if (id === this.notesList[i]['id']) {
+        this.NoteArray[i].classList.add('fadeOut');
+        break;
+      }
+    }
+    setTimeout( () =>{
+      this.notesService.deleteNote(id);
+    }, 1900);
   }
-
-  deliteNoteByfadeOut(elementToFadeOut) {
-
-    elementToFadeOut.classList.add('fadeOut');
-    setTimeout(function () {
-      elementToFadeOut.parentNode.removeChild(elementToFadeOut);
-    }, 2000);
-  }
-
 }
