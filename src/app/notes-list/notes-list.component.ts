@@ -10,7 +10,6 @@ import { NotesService } from '../services/notes.service';
 export class NotesListComponent implements OnInit {
 
   notesList: Note[];
-  NoteArray: object;
 
   constructor(private notesService: NotesService) { }
 
@@ -18,19 +17,12 @@ export class NotesListComponent implements OnInit {
 
     this.notesService.notesArray.subscribe(resArray => {
       this.notesList = resArray;
-    })
-    this.NoteArray = null;
+    });
   }
 
   deleteNote(id) {
 
-    this.NoteArray = document.querySelectorAll('.m-3');
-    for (let i = 0; i < this.notesList.length; i++) {
-      if (id === this.notesList[i]['id']) {
-        this.NoteArray[i].classList.add('fadeOut');
-        break;
-      }
-    }
+    document.getElementById(id).parentElement.parentElement.classList.add('fadeOut');
     setTimeout( () =>{
       this.notesService.deleteNote(id);
     }, 1900);

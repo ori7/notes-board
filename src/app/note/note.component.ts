@@ -9,7 +9,7 @@ import { Note } from '../models/note';
 export class NoteComponent implements OnInit {
 
   @Input() note: Note;
-  @Output() deleteNote: EventEmitter<number> = new EventEmitter<number>();
+  @Output() deleteNote: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() { }
 

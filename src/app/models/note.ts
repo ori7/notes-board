@@ -1,7 +1,7 @@
 import { Time } from '@angular/common';
 
 export interface Note {
-    id: number;
+    id: string;
     task: string;
     date: string;
     time: string;
