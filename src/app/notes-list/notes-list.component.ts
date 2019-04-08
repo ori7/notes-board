@@ -10,12 +10,26 @@ import { NotesService } from '../services/notes.service';
 export class NotesListComponent implements OnInit {
 
   notesList: Note[];
+  lastLengthOfArray: number;
+  addFadeInClass: boolean;
 
   constructor(private notesService: NotesService) { }
 
   ngOnInit() {
 
     this.notesService.notesArray.subscribe(resArray => {
+
+      if (this.lastLengthOfArray === undefined) {
+        this.lastLengthOfArray = resArray.length;
+      }
+
+      if (resArray.length > this.lastLengthOfArray) {
+        this.addFadeInClass = true;
+      } 
+      else
+        this.addFadeInClass = false;
+      this.lastLengthOfArray = resArray.length;
+
       this.notesList = resArray;
     });
   }
@@ -23,7 +37,7 @@ export class NotesListComponent implements OnInit {
   deleteNote(id) {
 
     document.getElementById(id).parentElement.parentElement.classList.add('fadeOut');
-    setTimeout( () =>{
+    setTimeout(() => {
       this.notesService.deleteNote(id);
     }, 1900);
   }
